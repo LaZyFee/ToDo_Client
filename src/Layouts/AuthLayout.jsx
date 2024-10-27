@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../Pages/Shared/Navbar";
 
-function Main() {
+function AuthLayout() {
   return (
     <>
       <Navbar />
@@ -10,4 +10,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default AuthLayout;

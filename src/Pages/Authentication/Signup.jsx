@@ -120,7 +120,7 @@ function Signup() {
 
               <p className="text-center">
                 Already have an account?{" "}
-                <Link className="text-[#F63E7B]" to="/login">
+                <Link className="text-[#F63E7B]" to="/auth/login">
                   Please Login
                 </Link>
               </p>

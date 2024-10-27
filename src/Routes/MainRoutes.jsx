@@ -1,19 +1,28 @@
 import { createBrowserRouter } from "react-router-dom";
-import Main from "../Layouts/Main";
+import AuthLayout from "../Layouts/AuthLayout";
 import Signup from "../Pages/Authentication/Signup";
 import Login from "../Pages/Authentication/Login";
-
+import MainLayout from "../Layouts/MainLayout";
+import PrivateRoute from "../Utils/privateRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Main />,
+    element: (
+      <PrivateRoute>
+        <MainLayout />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/auth",
+    element: <AuthLayout />,
     children: [
       {
-        path: "/signup",
+        path: "/auth/signup",
         element: <Signup />,
       },
       {
-        path: "/login",
+        path: "/auth/login",
         element: <Login />,
       },
     ],
