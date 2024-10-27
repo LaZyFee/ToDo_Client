@@ -1,9 +1,32 @@
-/*eslint-disable react/prop-types */
+/* eslint-disable react/prop-types */
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const ShowModal = ({ data, setAllToDos, closeModal }) => {
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const modalRef = useRef();
+
+  useEffect(() => {
+    // Close modal on 'Esc' key press
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") closeModal();
+    };
+
+    // Close modal on outside click
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        closeModal();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [closeModal]);
 
   const handleDelete = () => {
     axios
@@ -23,7 +46,7 @@ const ShowModal = ({ data, setAllToDos, closeModal }) => {
         data ? "modal-open" : ""
       } modal-bottom sm:modal-middle`}
     >
-      <div className="modal-box">
+      <div ref={modalRef} className="modal-box">
         <h3 className="font-bold text-lg">{data.title}</h3>
         <p className="py-4">{data.description}</p>
         <div className="modal-action">
@@ -44,9 +67,6 @@ const ShowModal = ({ data, setAllToDos, closeModal }) => {
                 className="btn btn-error"
               >
                 Delete
-              </button>
-              <button onClick={closeModal} className="btn">
-                Close
               </button>
             </>
           )}
