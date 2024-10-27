@@ -4,6 +4,9 @@ import Signup from "../Pages/Authentication/Signup";
 import Login from "../Pages/Authentication/Login";
 import MainLayout from "../Layouts/MainLayout";
 import PrivateRoute from "../Utils/privateRoute";
+import AllToDos from "../Pages/MainLayoutPages/allToDos";
+import ActiveTodos from "../Pages/MainLayoutPages/ActiveTodos";
+import CompleteTodos from "../Pages/MainLayoutPages/CompleteTodos";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -12,6 +15,23 @@ export const router = createBrowserRouter([
         <MainLayout />
       </PrivateRoute>
     ),
+
+    children: [
+      {
+        path: "/",
+        element: <AllToDos />,
+      },
+
+      {
+        path: "/active",
+        element: <ActiveTodos />,
+      },
+
+      {
+        path: "/complete",
+        element: <CompleteTodos />,
+      },
+    ],
   },
   {
     path: "/auth",

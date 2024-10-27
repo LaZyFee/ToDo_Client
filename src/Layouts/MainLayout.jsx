@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../Pages/Shared/Navbar";
 import { useAuth } from "../Store/AuthStore";
 import { HiMenuAlt2 } from "react-icons/hi";
@@ -8,6 +8,12 @@ import { GrCompliance } from "react-icons/gr";
 import { LuListTodo } from "react-icons/lu";
 
 function MainLayout() {
+  const menuItems = [
+    { name: "My ToDos", icon: <LuListTodo />, path: "." },
+    { name: "Active ToDos", icon: <RiAuctionLine />, path: "active" },
+    { name: "Completed ToDos", icon: <GrCompliance />, path: "complete" },
+  ];
+
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const handleLogout = async () => {
@@ -43,24 +49,22 @@ function MainLayout() {
                 <p className="text-center text-violet-400">{user?.email}</p>
               </div>
               <ul className="menu p-4">
-                <li>
-                  <Link className="text-2xl m-3" to="">
-                    <LuListTodo />
-                    <p className="text-sm">My ToDos</p>
-                  </Link>
-                </li>
-                <li>
-                  <Link className="text-2xl m-3" to="">
-                    <RiAuctionLine />
-                    <p className="text-sm">Active ToDos</p>
-                  </Link>
-                </li>
-                <li>
-                  <Link className="text-2xl m-3" to="">
-                    <GrCompliance />
-                    <p className="text-sm">Completed ToDos</p>
-                  </Link>
-                </li>
+                {menuItems.map((item) => (
+                  <li key={item.name}>
+                    <NavLink
+                      to={item.path}
+                      className={({ isActive }) =>
+                        isActive ? "text-[#F63E7B] text-xl font-semibold" : ""
+                      }
+                      end={item.path === "."} // Ensure exact matching for the root route
+                    >
+                      <span className="inline-flex items-center">
+                        {item.icon}
+                        <span className="ml-2">{item.name}</span>
+                      </span>
+                    </NavLink>
+                  </li>
+                ))}
               </ul>
             </div>
             <div>
