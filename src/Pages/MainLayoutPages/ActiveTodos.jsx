@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Skeleton from "../../Components/Skeleton";
+import Tab from "../../Components/Tab";
 
 function ActiveTodos() {
   const [allToDos, setAllToDos] = useState([]);
@@ -23,7 +24,8 @@ function ActiveTodos() {
 
   return (
     <div className="min-h-screen my-5 mx-5">
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4 mx-5 lg:mt-0">
+      <Tab />
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4 mx-5 my-5 lg:my-20">
         {allToDos.map((todo) => (
           <div
             key={todo._id}
@@ -38,6 +40,18 @@ function ActiveTodos() {
               <div className="card-actions justify-end">
                 <p className="text-sm font-bold text-green-700">
                   Status: {todo.status}
+                </p>
+                <p className="font-semibold text-fuchsia-600">
+                  Created:{" "}
+                  {new Date(todo.date).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: true,
+                  })}
                 </p>
               </div>
             </div>

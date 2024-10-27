@@ -1,8 +1,8 @@
-/* eslint-disable */
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Skeleton from "../../Components/Skeleton";
 import ShowModal from "../../Components/ShowModal";
+import Tab from "../../Components/Tab";
 
 function AllToDos() {
   const [allToDos, setAllToDos] = useState([]);
@@ -50,10 +50,18 @@ function AllToDos() {
   if (loading) return <Skeleton />;
 
   return (
-    <div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:mx-5 my-20">
+    <div className="min-h-screen my-5 mx-5">
+      <Tab />
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:mx-5 my-5 lg:my-20">
         {allToDos
-          .sort((a, b) => (a.status === "active" ? -1 : 1)) // Sort active todos first
+          .sort((a, b) => {
+            // Sort by status first, with "active" todos appearing before others
+            if (a.status !== b.status) return a.status === "active" ? -1 : 1;
+
+            // If both have the same status, sort by creation date (newest first)
+            return new Date(b.date) - new Date(a.date);
+          })
           .map((todo) => (
             <div
               key={todo._id}
