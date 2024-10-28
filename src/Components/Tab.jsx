@@ -13,14 +13,16 @@ function Tab() {
   return (
     <div
       role="tablist"
-      className="tabs tabs-bordered w-1/2 text-center mx-auto"
+      className="tabs tabs-bordered w-full text-center mx-auto flex justify-center lg:gap-2 p-2"
     >
       {menuItems.map((item) => (
         <NavLink
           key={item.name}
           to={item.path}
-          className={({ isActive }) => `tab ${isActive ? "tab-active" : ""}`}
-          end={item.path === "."} // Ensure exact matching for the root route
+          className={({ isActive }) =>
+            `tab ${isActive ? "tab-active font-semibold" : ""} 
+             textarea-xs sm:text-base lg:text-lg whitespace-nowrap`
+          }
           role="tab"
         >
           <span className="inline-flex items-center">

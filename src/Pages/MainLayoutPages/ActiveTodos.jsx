@@ -25,7 +25,7 @@ function ActiveTodos() {
   return (
     <div className="min-h-screen my-5 mx-5">
       <Tab />
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4 mx-5 my-5 lg:my-20">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:mx-5 my-5 lg:my-20">
         {allToDos.map((todo) => (
           <div
             key={todo._id}

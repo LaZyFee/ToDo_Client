@@ -49,27 +49,31 @@ const ShowModal = ({ data, setAllToDos, closeModal }) => {
       <div ref={modalRef} className="modal-box">
         <h3 className="font-bold text-lg">{data.title}</h3>
         <p className="py-4">{data.description}</p>
-        <div className="modal-action">
-          {confirmDelete ? (
-            <>
-              <p>Are you sure you want to delete this todo?</p>
-              <button onClick={handleDelete} className="btn btn-error">
-                Confirm Delete
-              </button>
-              <button onClick={() => setConfirmDelete(false)} className="btn">
-                Cancel
-              </button>
-            </>
-          ) : (
-            <>
+
+        {/* Flex container for buttons */}
+        <div className="flex justify-between mt-4">
+          <div className="btn">Update</div>
+
+          <div className="modal-action">
+            {confirmDelete ? (
+              <>
+                <p>Are you sure you want to delete this todo?</p>
+                <button onClick={handleDelete} className="btn btn-error">
+                  Confirm Delete
+                </button>
+                <button onClick={() => setConfirmDelete(false)} className="btn">
+                  Cancel
+                </button>
+              </>
+            ) : (
               <button
                 onClick={() => setConfirmDelete(true)}
                 className="btn btn-error"
               >
                 Delete
               </button>
-            </>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

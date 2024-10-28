@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Skeleton from "../../Components/Skeleton";
 import ShowModal from "../../Components/ShowModal";
 import Tab from "../../Components/Tab";
+import { FaPenSquare } from "react-icons/fa";
 
 function AllToDos() {
   const [allToDos, setAllToDos] = useState([]);
@@ -71,7 +72,7 @@ function AllToDos() {
               }}
             >
               <div className="card-body">
-                <h2 className="card-title font-semibold text-lime-500 whitespace-nowrap">
+                <h2 className="card-title font-semibold text-lime-500 lg:whitespace-nowrap">
                   {todo.title}
                 </h2>
                 <p>{todo.description.slice(0, 100) + "..."}</p>
@@ -111,7 +112,7 @@ function AllToDos() {
                       onClick={(event) => handleComplete(event, todo._id)}
                       className="btn btn-primary"
                     >
-                      Complete
+                      Maark as Complete
                     </button>
                   )}
                 </div>
@@ -126,6 +127,7 @@ function AllToDos() {
           closeModal={closeModal}
         />
       )}
+      <FaPenSquare className="fixed bottom-5 right-5 text-5xl text-lime-500" />
     </div>
   );
 }

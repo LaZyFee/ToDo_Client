@@ -20,13 +20,19 @@ function MainLayout() {
       <Navbar />
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+
         <div className="drawer-content flex flex-col">
+          {/* Flex container to position the icon at the top without extra spacing */}
+          <div className="flex justify-between items-center p-4 lg:hidden">
+            <label htmlFor="my-drawer-2" className="drawer-button">
+              <HiMenuAlt2 className="text-3xl" />
+            </label>
+          </div>
+
           {/* Page content here */}
           <Outlet />
-          <label htmlFor="my-drawer-2" className="drawer-button lg:hidden">
-            <HiMenuAlt2 className="text-3xl" />
-          </label>
         </div>
+
         <div className="drawer-side">
           <label
             htmlFor="my-drawer-2"
@@ -34,22 +40,19 @@ function MainLayout() {
             className="drawer-overlay"
           ></label>
           <div className="flex flex-col justify-around h-full p-4 bg-slate-900 text-white">
-            <div>
-              <div className="flex flex-col gap-3 items-center">
-                <p className="text-xl font-bold text-red-400">{user?.name}</p>
-                <p className="text-center text-violet-400">{user?.email}</p>
-              </div>
+            <div className="flex flex-col gap-3 items-center">
+              <p className="text-xl font-bold text-red-400">{user?.name}</p>
+              <p className="text-center text-violet-400">{user?.email}</p>
             </div>
-            <div>
-              <ul className="menu">
-                <li>
-                  <button className="text-2xl m-3" onClick={handleLogout}>
-                    <CiPower />
-                    <p className="text-sm">Logout</p>
-                  </button>
-                </li>
-              </ul>
-            </div>
+
+            <ul className="menu">
+              <li>
+                <button className="text-2xl m-3" onClick={handleLogout}>
+                  <CiPower />
+                  <p className="text-sm">Logout</p>
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
