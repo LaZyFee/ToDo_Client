@@ -1,6 +1,7 @@
+/*eslint-disable */
 import { useState, useEffect, useRef } from "react";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
-import UpdateToDoModal from "../Components/UpdateToDoModal";
+import UpdateToDoModal from "./UpdateToDoModal";
 import axios from "axios";
 
 const ShowModal = ({ data, setAllToDos, closeModal }) => {
