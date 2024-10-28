@@ -1,23 +1,20 @@
-/* eslint-disable */
-import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
+import UpdateToDoModal from "../Components/UpdateToDoModal";
+import axios from "axios";
 
 const ShowModal = ({ data, setAllToDos, closeModal }) => {
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
     useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const modalRef = useRef();
   const confirmModalRef = useRef();
 
   useEffect(() => {
-    // Close modal on 'Esc' key press
     const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
-        closeModal();
-      }
+      if (event.key === "Escape") closeModal();
     };
 
-    // Close modal on outside click
     const handleClickOutside = (event) => {
       if (
         modalRef.current &&
@@ -27,6 +24,7 @@ const ShowModal = ({ data, setAllToDos, closeModal }) => {
       ) {
         closeModal();
         setIsDeleteConfirmationOpen(false);
+        setIsEditModalOpen(false);
       }
     };
 
@@ -46,8 +44,8 @@ const ShowModal = ({ data, setAllToDos, closeModal }) => {
         setAllToDos((prevTodos) =>
           prevTodos.filter((todo) => todo._id !== data._id)
         );
-        closeModal(); // Close the main modal
-        setIsDeleteConfirmationOpen(false); // Close the confirmation modal
+        closeModal();
+        setIsDeleteConfirmationOpen(false);
       })
       .catch((error) => console.error("Error deleting todo:", error));
   };
@@ -55,37 +53,49 @@ const ShowModal = ({ data, setAllToDos, closeModal }) => {
   return (
     <>
       {/* Main Modal */}
-      <div
-        className={`modal ${
-          data ? "modal-open" : ""
-        } modal-bottom sm:modal-middle`}
-      >
-        <div ref={modalRef} className="modal-box">
-          <h3 className="font-bold text-lg">{data.title}</h3>
-          <p
-            style={{
-              whiteSpace: "pre-wrap",
-            }}
-          >
-            {data.description}
-          </p>
+      {!isEditModalOpen && (
+        <div
+          className={`modal ${
+            data ? "modal-open" : ""
+          } modal-bottom sm:modal-middle`}
+        >
+          <div ref={modalRef} className="modal-box">
+            <h3 className="font-bold text-lg">{data.title}</h3>
+            <p style={{ whiteSpace: "pre-wrap" }}>{data.description}</p>
 
-          <div className="flex justify-end gap-3 mt-4">
-            <button className="btn bg-primary text-white">
-              <FaEdit className="text-3xl" />
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsDeleteConfirmationOpen(true);
-              }}
-              className="btn bg-red-500 text-white"
-            >
-              <FaTrashAlt className="text-3xl" />
-            </button>
+            <div className="flex justify-end gap-3 mt-4">
+              <button
+                className="btn bg-primary text-white"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsEditModalOpen(true); // Only set the UpdateToDoModal open state
+                }}
+              >
+                <FaEdit className="text-3xl" />
+              </button>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsDeleteConfirmationOpen(true);
+                }}
+                className="btn bg-red-500 text-white"
+              >
+                <FaTrashAlt className="text-3xl" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Conditionally render UpdateToDoModal */}
+      {isEditModalOpen && (
+        <UpdateToDoModal
+          data={data}
+          onClose={() => setIsEditModalOpen(false)}
+          setAllToDos={setAllToDos}
+        />
+      )}
 
       {/* Delete Confirmation Modal */}
       {isDeleteConfirmationOpen && (
@@ -97,7 +107,7 @@ const ShowModal = ({ data, setAllToDos, closeModal }) => {
               <div className="modal-action flex justify-end gap-4 mt-4">
                 <button
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevent outside click handling
+                    e.stopPropagation();
                     handleDelete();
                   }}
                   className="btn btn-primary"
