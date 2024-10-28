@@ -1,4 +1,3 @@
-/*eslint-disable */
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Skeleton from "../../Components/Skeleton";
@@ -7,6 +6,7 @@ import Tab from "../../Components/Tab";
 import { FaPenSquare } from "react-icons/fa";
 import CreateToDoModal from "../../Components/CreateToDoModal";
 import ShowToast from "../../Utils/ShowToast";
+
 function AllToDos() {
   const [allToDos, setAllToDos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,14 +18,12 @@ function AllToDos() {
     axios
       .get(`${import.meta.env.VITE_BACKEND_URL}/todo/todos`)
       .then((response) => {
-        const todosData = response.data.data;
-        setAllToDos(todosData);
-        setLoading(false);
+        setAllToDos(response.data.data);
       })
       .catch((error) => {
         console.error("Error fetching todos:", error);
-        setLoading(false);
-      });
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   // Complete a todo
@@ -33,7 +31,7 @@ function AllToDos() {
     event.stopPropagation();
     axios
       .patch(`${import.meta.env.VITE_BACKEND_URL}/todo/${id}/complete`)
-      .then((response) => {
+      .then(() => {
         ShowToast("success", "Todo marked as complete", "success");
         setAllToDos((prevTodos) =>
           prevTodos.map((todo) =>
@@ -46,15 +44,29 @@ function AllToDos() {
       });
   };
 
-  // Function to open the modal
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+  // Format date for display
+  const formatDate = (date) =>
+    new Date(date).toLocaleString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
 
-  // Close modal and reset selectedTodo
-  const closeModal = () => {
-    setSelectedTodo(null);
-    setIsModalOpen(false);
+  // Truncate long descriptions
+  const truncateDescription = (description, maxLength = 100) => {
+    if (description.length > maxLength) {
+      return (
+        <>
+          {description.slice(0, maxLength)}
+          <span className="text-blue-600 text-2xl font-semibold">......</span>
+        </>
+      );
+    }
+    return description;
   };
 
   if (loading) return <Skeleton />;
@@ -76,43 +88,34 @@ function AllToDos() {
             <div
               key={todo._id}
               className="card bg-base-500 shadow-xl hover:shadow-2xl"
-              onClick={() => {
-                setSelectedTodo(todo);
-              }}
+              onClick={() => setSelectedTodo(todo)}
             >
               <div className="card-body">
                 <h2 className="card-title font-semibold text-lime-500 lg:whitespace-nowrap">
                   {todo.title}
                 </h2>
                 <div className="divider"></div>
-                <p>{todo.description.slice(0, 100) + "..."}</p>
+                <p
+                  style={{
+                    whiteSpace: "pre-wrap",
+                  }}
+                >
+                  {truncateDescription(todo.description)}
+                </p>
+                <hr />
                 <p className="font-semibold text-green-600">
                   Status: {todo.status}
                 </p>
+                <hr />
+
                 <p className="font-semibold text-fuchsia-600">
-                  Created:{" "}
-                  {new Date(todo.date).toLocaleString("en-US", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                    hour12: true,
-                  })}
+                  Created: {formatDate(todo.date)}
                 </p>
+                <hr />
+
                 {todo.completedAt && (
                   <p className="font-semibold text-green-600">
-                    Completed:{" "}
-                    {new Date(todo.completedAt).toLocaleString("en-US", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      second: "2-digit",
-                      hour12: true,
-                    })}
+                    Completed: {formatDate(todo.completedAt)}
                   </p>
                 )}
 
@@ -136,18 +139,24 @@ function AllToDos() {
         <ShowModal
           data={selectedTodo}
           setAllToDos={setAllToDos}
-          closeModal={closeModal}
+          closeModal={() => {
+            setSelectedTodo(null);
+            setIsModalOpen(false);
+          }}
         />
       )}
 
       {/* Show CreateToDoModal if isModalOpen is true */}
       {isModalOpen && (
-        <CreateToDoModal onClose={closeModal} setAllToDos={setAllToDos} />
+        <CreateToDoModal
+          onClose={() => setIsModalOpen(false)}
+          setAllToDos={setAllToDos}
+        />
       )}
 
       {/* Add onClick to open the modal */}
       <div
-        onClick={openModal}
+        onClick={() => setIsModalOpen(true)}
         className="fixed bottom-5 right-5 cursor-pointer"
       >
         <FaPenSquare className="text-5xl text-lime-500" />

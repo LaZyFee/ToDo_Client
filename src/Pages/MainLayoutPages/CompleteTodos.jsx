@@ -25,37 +25,54 @@ function CompleteTodos() {
   return (
     <div className="min-h-screen my-5 mx-5">
       <Tab />{" "}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:mx-5 my-5 lg:my-20">
-        {allToDos.map((todo) => (
-          <div
-            key={todo._id}
-            className="card bg-base-100 shadow-xl hover:shadow-2xl"
-          >
-            <div className="card-body">
-              <h2 className="card-title text-fuchsia-600 font-semibold">
-                {todo.title}
-              </h2>
-              <p>{todo.description}</p>
-
-              <div className="card-actions justify-end">
-                {todo.completedAt && (
-                  <p className="font-semibold text-green-600">
-                    Completed:{" "}
-                    {new Date(todo.completedAt).toLocaleString("en-US", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      second: "2-digit",
-                      hour12: true,
-                    })}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:mx-5 my-5 lg:my-20">
+        {allToDos.length > 0 ? (
+          allToDos
+            .sort((a, b) => {
+              // If both have the same status, sort by creation date (newest first)
+              return new Date(b.date) - new Date(a.date);
+            })
+            .map((todo) => (
+              <div
+                key={todo._id}
+                className="card bg-base-100 shadow-xl hover:shadow-2xl"
+              >
+                <div className="card-body">
+                  <h2 className="card-title text-fuchsia-600 font-semibold">
+                    {todo.title}
+                  </h2>
+                  <p
+                    style={{
+                      whiteSpace: "pre-wrap",
+                    }}
+                  >
+                    {todo.description}
                   </p>
-                )}
+
+                  <div className="card-actions justify-end">
+                    {todo.completedAt && (
+                      <p className="font-semibold text-green-600">
+                        Completed:{" "}
+                        {new Date(todo.completedAt).toLocaleString("en-US", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                          hour12: true,
+                        })}
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
+            ))
+        ) : (
+          <p className="text-fuchsia-600 font-bold text-2xl">
+            No completed todos found.Please check ToDos & Complete them.{" "}
+          </p>
+        )}
       </div>
     </div>
   );

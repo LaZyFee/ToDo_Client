@@ -44,13 +44,14 @@ function CreateToDoModal({ onClose, setAllToDos }) {
             placeholder="Title"
             className="input input-bordered w-full my-2"
           />
-          <input
+          <textarea
             type="text"
             name="description"
             value={formData.description}
             onChange={handleInputChange}
             placeholder="Write a description"
-            className="input input-bordered w-full my-2"
+            className="textarea textarea-bordered w-full min-h-[100px] max-h-[200px] resize-none bg-white"
+            style={{ whiteSpace: "pre-wrap" }}
           />
           <div className="flex justify-between mt-4">
             <button onClick={onClose} className="btn btn-secondary">

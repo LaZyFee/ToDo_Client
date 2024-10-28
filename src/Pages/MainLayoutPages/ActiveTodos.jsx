@@ -6,6 +6,7 @@ import Tab from "../../Components/Tab";
 function ActiveTodos() {
   const [allToDos, setAllToDos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     axios
@@ -13,50 +14,71 @@ function ActiveTodos() {
       .then((response) => {
         const todosData = response.data.data;
         setAllToDos(todosData);
-        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching todos:", error);
-        setLoading(false);
-      });
+        setError("Failed to load todos. Please try again.");
+      })
+      .finally(() => setLoading(false));
   }, []);
+
+  const formatDate = (date) =>
+    new Date(date).toLocaleString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
+
   if (loading) return <Skeleton />;
+  if (error) return <div className="text-red-600 my-5">{error}</div>;
 
   return (
     <div className="min-h-screen my-5 mx-5">
       <Tab />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:mx-5 my-5 lg:my-20">
-        {allToDos.map((todo) => (
-          <div
-            key={todo._id}
-            className="card bg-base-100 shadow-xl hover:shadow-2xl"
-          >
-            <div className="card-body">
-              <h2 className="card-title text-fuchsia-600 font-semibold">
-                {todo.title}
-              </h2>
-              <p>{todo.description}</p>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:mx-5 my-5 lg:my-20">
+        {allToDos.length > 0 ? (
+          allToDos
+            .sort((a, b) => {
+              // If both have the same status, sort by creation date (newest first)
+              return new Date(b.date) - new Date(a.date);
+            })
+            .map((todo) => (
+              <div
+                key={todo._id}
+                className="card bg-base-100 shadow-xl hover:shadow-2xl"
+              >
+                <div className="card-body">
+                  <h2 className="card-title text-fuchsia-600 font-semibold">
+                    {todo.title}
+                  </h2>
+                  <p
+                    style={{
+                      whiteSpace: "pre-wrap",
+                    }}
+                  >
+                    {todo.description}
+                  </p>
 
-              <div className="card-actions justify-end">
-                <p className="text-sm font-bold text-green-700">
-                  Status: {todo.status}
-                </p>
-                <p className="font-semibold text-fuchsia-600">
-                  Created:{" "}
-                  {new Date(todo.date).toLocaleString("en-US", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                    hour12: true,
-                  })}
-                </p>
+                  <div className="card-actions justify-end">
+                    <p className="text-sm font-bold text-green-700">
+                      Status: {todo.status}
+                    </p>
+                    <p className="font-semibold text-fuchsia-600">
+                      Created: {formatDate(todo.date)}
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
+            ))
+        ) : (
+          <p className="text-fuchsia-600 font-bold text-2xl">
+            No Active todos found. Please add a todo.
+          </p>
+        )}
       </div>
     </div>
   );

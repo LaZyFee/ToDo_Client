@@ -1,7 +1,7 @@
 /* eslint-disable */
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt, FaEdit } from "react-icons/fa";
 
 const ShowModal = ({ data, setAllToDos, closeModal }) => {
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
@@ -62,22 +62,27 @@ const ShowModal = ({ data, setAllToDos, closeModal }) => {
       >
         <div ref={modalRef} className="modal-box">
           <h3 className="font-bold text-lg">{data.title}</h3>
-          <p className="py-4">{data.description}</p>
+          <p
+            style={{
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            {data.description}
+          </p>
 
-          <div className="flex justify-between mt-4">
-            <div className="btn btn-info">Update</div>
-
-            <div className="modal-action">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsDeleteConfirmationOpen(true);
-                }}
-                className="btn bg-red-500 text-white"
-              >
-                <FaTrashAlt className="text-3xl" />
-              </button>
-            </div>
+          <div className="flex justify-end gap-3 mt-4">
+            <button className="btn bg-primary text-white">
+              <FaEdit className="text-3xl" />
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsDeleteConfirmationOpen(true);
+              }}
+              className="btn bg-red-500 text-white"
+            >
+              <FaTrashAlt className="text-3xl" />
+            </button>
           </div>
         </div>
       </div>

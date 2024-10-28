@@ -20,7 +20,7 @@ function Tab() {
           key={item.name}
           to={item.path}
           className={({ isActive }) =>
-            `tab ${isActive ? "tab-active font-semibold" : ""} 
+            `tab ${isActive ? "tab-active font-semibold text-rose-700" : ""} 
              textarea-xs sm:text-base lg:text-lg whitespace-nowrap`
           }
           role="tab"
