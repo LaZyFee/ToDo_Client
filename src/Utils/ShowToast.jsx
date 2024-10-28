@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 
-export const showToast = (title, text, icon = "success") => {
+const showToast = (title, text, icon) => {
   Swal.fire({
     title,
     text,
@@ -12,3 +12,4 @@ export const showToast = (title, text, icon = "success") => {
     timerProgressBar: true,
   });
 };
+export default showToast;

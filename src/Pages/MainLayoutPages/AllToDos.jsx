@@ -1,14 +1,17 @@
+/*eslint-disable */
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Skeleton from "../../Components/Skeleton";
 import ShowModal from "../../Components/ShowModal";
 import Tab from "../../Components/Tab";
 import { FaPenSquare } from "react-icons/fa";
-
+import CreateToDoModal from "../../Components/CreateToDoModal";
+import ShowToast from "../../Utils/ShowToast";
 function AllToDos() {
   const [allToDos, setAllToDos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
   // Fetch todos on mount
   useEffect(() => {
@@ -31,7 +34,7 @@ function AllToDos() {
     axios
       .patch(`${import.meta.env.VITE_BACKEND_URL}/todo/${id}/complete`)
       .then((response) => {
-        console.log("Todo marked as complete:", response.data); // Debug log
+        ShowToast("success", "Todo marked as complete", "success");
         setAllToDos((prevTodos) =>
           prevTodos.map((todo) =>
             todo._id === id ? { ...todo, status: "complete" } : todo
@@ -43,9 +46,15 @@ function AllToDos() {
       });
   };
 
+  // Function to open the modal
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
   // Close modal and reset selectedTodo
   const closeModal = () => {
     setSelectedTodo(null);
+    setIsModalOpen(false);
   };
 
   if (loading) return <Skeleton />;
@@ -75,6 +84,7 @@ function AllToDos() {
                 <h2 className="card-title font-semibold text-lime-500 lg:whitespace-nowrap">
                   {todo.title}
                 </h2>
+                <div className="divider"></div>
                 <p>{todo.description.slice(0, 100) + "..."}</p>
                 <p className="font-semibold text-green-600">
                   Status: {todo.status}
@@ -112,7 +122,7 @@ function AllToDos() {
                       onClick={(event) => handleComplete(event, todo._id)}
                       className="btn btn-primary"
                     >
-                      Maark as Complete
+                      Mark as Complete
                     </button>
                   )}
                 </div>
@@ -120,6 +130,8 @@ function AllToDos() {
             </div>
           ))}
       </div>
+
+      {/* Show modal if a todo is selected */}
       {selectedTodo && (
         <ShowModal
           data={selectedTodo}
@@ -127,7 +139,19 @@ function AllToDos() {
           closeModal={closeModal}
         />
       )}
-      <FaPenSquare className="fixed bottom-5 right-5 text-5xl text-lime-500" />
+
+      {/* Show CreateToDoModal if isModalOpen is true */}
+      {isModalOpen && (
+        <CreateToDoModal onClose={closeModal} setAllToDos={setAllToDos} />
+      )}
+
+      {/* Add onClick to open the modal */}
+      <div
+        onClick={openModal}
+        className="fixed bottom-5 right-5 cursor-pointer"
+      >
+        <FaPenSquare className="text-5xl text-lime-500" />
+      </div>
     </div>
   );
 }
