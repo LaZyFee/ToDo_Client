@@ -23,16 +23,6 @@ This is a Todo web application built with React and Vite, featuring user authent
   - [Express](https://expressjs.com/)
   - [MongoDB](https://www.mongodb.com/)
 
-## Getting Started
-
-### Prerequisites
-
-Make sure you have Node.js and npm installed on your machine. You can check your installation by running:
-
-```bash
-node -v
-npm -v
-
 ## Usage
 
 1. **Sign Up / Log In**:
@@ -57,3 +47,13 @@ npm -v
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Getting Started
+
+### Prerequisites
+
+Make sure you have Node.js and npm installed on your machine. You can check your installation by running:
+
+```bash
+node -v
+npm -v
+
