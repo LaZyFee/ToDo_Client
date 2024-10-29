@@ -12,7 +12,6 @@ function AllToDos() {
   const [loading, setLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
-
   // Fetch todos on mount
   useEffect(() => {
     axios
