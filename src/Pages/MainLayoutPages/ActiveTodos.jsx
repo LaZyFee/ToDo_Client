@@ -2,15 +2,17 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Skeleton from "../../Components/Skeleton";
 import Tab from "../../Components/Tab";
+import { useAuth } from "../../Store/AuthStore";
 
 function ActiveTodos() {
+  const { user } = useAuth();
   const [allToDos, setAllToDos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const email = user.email;
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/todo/active`)
+      .get(`${import.meta.env.VITE_BACKEND_URL}/todo/active?email=${email}`)
       .then((response) => {
         const todosData = response.data.data;
         setAllToDos(todosData);
@@ -20,7 +22,7 @@ function ActiveTodos() {
         setError("Failed to load todos. Please try again.");
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [email]);
 
   const formatDate = (date) =>
     new Date(date).toLocaleString("en-US", {

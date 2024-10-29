@@ -2,14 +2,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Skeleton from "../../Components/Skeleton";
 import Tab from "../../Components/Tab";
+import { useAuth } from "../../Store/AuthStore";
 
 function CompleteTodos() {
+  const { user } = useAuth();
   const [allToDos, setAllToDos] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/todo/complete`)
+      .get(
+        `${import.meta.env.VITE_BACKEND_URL}/todo/complete?email=${user.email}`
+      )
       .then((response) => {
         const todosData = response.data.data;
         setAllToDos(todosData);
@@ -19,7 +23,7 @@ function CompleteTodos() {
         console.error("Error fetching todos:", error);
         setLoading(false);
       });
-  }, []);
+  }, [user.email]);
   if (loading) return <Skeleton />;
 
   return (

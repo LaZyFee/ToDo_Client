@@ -2,8 +2,10 @@
 import axios from "axios";
 import { useState } from "react";
 import ShowToast from "../Utils/ShowToast";
+import { useAuth } from "../Store/AuthStore";
 
 function CreateToDoModal({ onClose, setAllToDos }) {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({ title: "", description: "" });
 
   const handleInputChange = (e) => {
@@ -19,11 +21,13 @@ function CreateToDoModal({ onClose, setAllToDos }) {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/todo/create`,
-        formData
+        {
+          ...formData,
+          email: user.email,
+        }
       );
       ShowToast("Success", "Todo created successfully", "success");
 
-      // Add new todo to the existing todos list
       setAllToDos((prev) => [response.data.data, ...prev]);
       onClose();
     } catch (error) {

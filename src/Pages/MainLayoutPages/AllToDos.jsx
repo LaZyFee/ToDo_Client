@@ -6,16 +6,19 @@ import Tab from "../../Components/Tab";
 import { FaPenSquare } from "react-icons/fa";
 import CreateToDoModal from "../../Components/CreateToDoModal";
 import ShowToast from "../../Utils/ShowToast";
+import { useAuth } from "../../Store/AuthStore";
 
 function AllToDos() {
+  const { user } = useAuth();
   const [allToDos, setAllToDos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
   // Fetch todos on mount
+
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/todo/todos`)
+      .get(`${import.meta.env.VITE_BACKEND_URL}/todo/todos/${user.email}`)
       .then((response) => {
         setAllToDos(response.data.data);
       })
@@ -23,7 +26,7 @@ function AllToDos() {
         console.error("Error fetching todos:", error);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [user.email]);
 
   // Complete a todo
   const handleComplete = (event, id) => {

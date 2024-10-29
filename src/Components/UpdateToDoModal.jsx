@@ -2,11 +2,16 @@
 import { useState } from "react";
 import axios from "axios";
 import showToast from "../Utils/ShowToast";
+import { useAuth } from "../Store/AuthStore";
 
 function UpdateToDoModal({ data, onClose, setAllToDos }) {
+  const { user } = useAuth();
+  const userId = user._id;
   const [formData, setFormData] = useState({
     title: data.title || "",
     description: data.description || "",
+    status: data.status || "",
+    userId: userId,
   });
 
   const handleInputChange = (e) => {
@@ -20,19 +25,24 @@ function UpdateToDoModal({ data, onClose, setAllToDos }) {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(
+      const response = await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/todo/${data._id}/update`,
         formData
       );
+      const updatedTodo = response.data.data;
       showToast("Success", "Todo updated successfully", "success");
       setAllToDos((prevTodos) =>
         prevTodos.map((todo) =>
-          todo._id === data._id ? { ...todo, ...formData } : todo
+          todo._id === data._id ? { ...todo, ...updatedTodo } : todo
         )
       );
-      onClose(); // Closes both modals
+      onClose();
     } catch (error) {
-      showToast("Error", "Please fill all the fields", "error");
+      console.error(
+        "Error updating todo:",
+        error.response?.data || error.message
+      );
+      showToast("Error", "Error updating todo", "error");
     }
   };
 
