@@ -4,7 +4,7 @@ import Signup from "../Pages/Authentication/Signup";
 import Login from "../Pages/Authentication/Login";
 import MainLayout from "../Layouts/MainLayout";
 import PrivateRoute from "../Utils/PrivateRoute";
-import AllToDos from "../Pages/MainLayoutPages/allToDos";
+import AllToDos from "../Pages/MainLayoutPages/AllToDos";
 import ActiveTodos from "../Pages/MainLayoutPages/ActiveTodos";
 import CompleteTodos from "../Pages/MainLayoutPages/CompleteTodos";
 export const router = createBrowserRouter([
