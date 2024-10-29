@@ -44,6 +44,8 @@ function CompleteTodos() {
                   <p
                     style={{
                       whiteSpace: "pre-wrap",
+                      overflowWrap: "break-word",
+                      wordBreak: "break-word",
                     }}
                   >
                     {todo.description}

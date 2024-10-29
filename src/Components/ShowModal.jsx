@@ -55,14 +55,18 @@ const ShowModal = ({ data, setAllToDos, closeModal }) => {
     <>
       {/* Main Modal */}
       {!isEditModalOpen && (
-        <div
-          className={`modal ${
-            data ? "modal-open" : ""
-          } modal-bottom sm:modal-middle`}
-        >
+        <div className={`modal ${data ? "modal-open" : ""} modal-middle`}>
           <div ref={modalRef} className="modal-box">
             <h3 className="font-bold text-lg">{data.title}</h3>
-            <p style={{ whiteSpace: "pre-wrap" }}>{data.description}</p>
+            <p
+              style={{
+                whiteSpace: "pre-wrap",
+                overflowWrap: "break-word",
+                wordBreak: "break-word",
+              }}
+            >
+              {data.description}
+            </p>
 
             <div className="flex justify-end gap-3 mt-4">
               <button

@@ -97,10 +97,13 @@ function AllToDos() {
                 <p
                   style={{
                     whiteSpace: "pre-wrap",
+                    overflowWrap: "break-word",
+                    wordBreak: "break-word",
                   }}
                 >
                   {truncateDescription(todo.description)}
                 </p>
+
                 <hr />
                 <p className="font-semibold text-green-600">
                   Status: {todo.status}
