@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { FaSun, FaMoon } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   // State to track theme
@@ -18,7 +19,9 @@ function Navbar() {
   return (
     <div className="navbar shadow-xl">
       <div className="navbar-start">
-        <a className="btn btn-ghost text-xl">ToDo</a>
+        <Link to="/">
+          <a className="btn btn-ghost text-xl">ToDo</a>
+        </Link>
       </div>
       <div className="navbar-end flex items-center">
         {/* Using icons as the toggle button */}
